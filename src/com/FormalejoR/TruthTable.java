@@ -84,7 +84,6 @@ public class TruthTable {
                 break;
             } else if (expr.equalsIgnoreCase("$h")) {
                 printHelp(mode);
-                printHelp('\0');
             } else if (expr.equalsIgnoreCase("$e")) {
                 mode = 'e';
                 printHelp(mode);
