@@ -279,6 +279,10 @@ public class TruthTable {
         } while (groups.size() > 0);
         return i-1;
     }
+    public enum NodeType {
+        OPERATOR,
+        PROPOSITION
+    }
 
     static class LogicNode {
         LogicNode left;
