@@ -3,7 +3,7 @@ package com.FormalejoR;
 import java.util.*;
 
 public class TruthTable {
-    private static final String VALID_SYMBOL_REGEX = "^[\\(\\)~&v≡:>⊃(A-Z)]+$";
+    private static final String VALID_SYMBOL = "^[\\(\\)~&v≡:>⊃(A-Z)]+$";
 
     public static void main(String[] args) {
 
@@ -61,19 +61,18 @@ public class TruthTable {
         }
     }
     public static String evaluateArgument(ArrayList<String> premises, String conclusion) {
-        String res = "";
+        String result = "";
 
 
-        return res;
+        return result;
     }
     public static String evaluateExpression(String expression) {
-        String res = "";
+        String result = "";
 
-        return res;
+        return result;
     }
     public static void interactivePrompt() {
         Scanner stdin = new Scanner(System.in);
-        Map<Character, Boolean> propMap = new HashMap<>();
         char mode = 'h';
         printConsoleInfo();
         while (true) {
@@ -87,8 +86,7 @@ public class TruthTable {
                 mode = 'e';
                 printHelp(mode);
             }  else {
-                switch (mode) {
-                    case 'e':
+                if (mode == 'e') {
                         System.out.println(runExpressionTable(expr));
                         break;
 
@@ -97,7 +95,7 @@ public class TruthTable {
         }
     }
     public static String runExpressionTable(String expr) {
-        if (expr.matches(VALID_SYMBOL_REGEX)) {
+        if (expr.matches(VALID_SYMBOL)) {
 
             Map<Character, Boolean> propMap = new LinkedHashMap<>();
             for (Character c: expr.toCharArray()) {
@@ -105,7 +103,7 @@ public class TruthTable {
                     propMap.put(c, true);
                 }
             }
-            //Next, build the expression
+
             LogicNode rootNode;
             try {
                 rootNode = buildTree(expr);
@@ -119,7 +117,7 @@ public class TruthTable {
             String[] args = Arrays.copyOf(String.valueOf(propMap.keySet()).split(""), propMap.size()+1);
             args[propMap.size()] = expr;
 
-            String res = ""; //Resulting table
+            String res = "";
             final int[] dividers = new int[]{propMap.size()-1};
             res += getLine('╔', '╗', '═', '╦', args, dividers);
             res += "║";
