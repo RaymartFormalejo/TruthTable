@@ -76,7 +76,6 @@ public class TruthTable {
         Map<Character, Boolean> propMap = new HashMap<>();
         char mode = 'h';
         printConsoleInfo();
-        printHelp(mode);
         while (true) {
             System.out.print("(" + mode + ") > ");
             String expr = stdin.next();
@@ -187,7 +186,8 @@ public class TruthTable {
                         "Instruction:\n\t" +
                                 "Enter an expression, command, argument, or proposition\n" +
                                 "\tCommands:\n" +
-                                "\t\t$h (this help)\n" +
+                                "\t\t$h (help)\n" +
+                                "\t\t$e (Truth Table)\n" +
                                 "\t\t$q (quit)\n" +
                                 "\tExpressions:\n" +
                                 "\t\tMust only contain defined propositions and valid logical symbols\n" +
