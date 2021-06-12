@@ -6,88 +6,28 @@ public class TruthTable {
     private static final String VALID_SYMBOL = "^[\\(\\)~&v≡:>⊃(A-Z)]+$";
 
     public static void main(String[] args) {
-
-        if (args.length > 0) {
-            runArguments(args);
-        } else {
             interactivePrompt();
-        }
-    }
-    public static void runArguments(String[] args) {
-
-        char collecting = '0';
-        ArrayList<String> premises = new ArrayList<>();
-        String conclusion = null;
-        String expression = null;
-        for (String arg: args) {
-            if (arg.charAt(0) == '-' && arg.length() > 2) {
-                switch (arg.charAt(1)) {
-                    case 'h':
-                        printConsoleHelp();
-                        break;
-                    case 'p':
-                        collecting = 'p';
-                        break;
-                    case 'c':
-                        collecting = 'c';
-                        break;
-                    case 'e':
-                        collecting = 'e';
-                        break;
-                    default:
-                        printConsoleHelp();
-                        throw new IllegalArgumentException("Invalid parameter: '" + arg + "'");
-                }
-            } else {
-                switch (collecting) {
-                    case 'p':
-                        premises.addAll(Arrays.asList(arg.split(",")));
-                        break;
-                    case 'c':
-                        conclusion = arg;
-                        break;
-                    case 'e':
-                        expression = arg;
-                        break;
-                    default:
-                        throw new IllegalArgumentException("Please specify a parameter first: '" + arg + "'");
-                }
-            }
-        }
-        if (premises.size() > 0 && conclusion != null) {
-            System.out.println(evaluateArgument(premises, conclusion));
-        } else if (expression != null) {
-            System.out.println(evaluateExpression(expression));
-        }
-    }
-    public static String evaluateArgument(ArrayList<String> premises, String conclusion) {
-        String result = "";
-
-
-        return result;
-    }
-    public static String evaluateExpression(String expression) {
-        String result = "";
-
-        return result;
     }
     public static void interactivePrompt() {
         Scanner stdin = new Scanner(System.in);
-        char mode = 'h';
+        char mode = '1';
         printConsoleInfo();
         while (true) {
-            System.out.print("(" + mode + ") > ");
+            System.out.print("[" + mode + "] > ");
             String expr = stdin.next();
-            if (expr.equalsIgnoreCase("$q")) {
+            if (expr.equalsIgnoreCase("3")) {
                 break;
-            } else if (expr.equalsIgnoreCase("$h")) {
+            } else if (expr.equalsIgnoreCase("1")) {
                 printHelp(mode);
-            } else if (expr.equalsIgnoreCase("$e")) {
-                mode = 'e';
+            } else if (expr.equalsIgnoreCase("2")) {
+                mode = '2';
                 printHelp(mode);
             }  else {
-                if (mode == 'e') {
+                switch (mode) {
+                    case '2':
                         System.out.println(runExpressionTable(expr));
+                        break;
+                    default:
                         break;
 
                 }
@@ -176,45 +116,58 @@ public class TruthTable {
     }
     public static void printHelp(char mode) {
         switch (mode) {
-            case 'e':
+            case '2':
                 System.out.println("Enter expressions only containing proposition letters and valid symbols, such as 'Av(B&C)'");
                 break;
             default:
                 System.out.println(
-                        "Instruction:\n\t" +
-                                "Enter an expression, command, argument, or proposition\n" +
-                                "\tCommands:\n" +
-                                "\t\t$h (help)\n" +
-                                "\t\t$e (Truth Table)\n" +
-                                "\t\t$q (quit)\n" +
-                                "\tExpressions:\n" +
-                                "\t\tMust only contain defined propositions and valid logical symbols\n" +
-                                "\t\tValid logical symbols are limited to ( and ) for grouping, v for OR, & for AND, ≡ or : for biconditional, ⊃ or > for conditional, and ~ for NOT\n" +
-                                "\t\tGrouping symbols ( and ) must be used so that each operator (excluding ~) has no more and no less than two operands (for example, (P&Q)&R is valid, but P&Q&R is not)\n" +
-                                "\t\tNegation ~ may be used before groups or propositions, but never before another operator (for example, ~P&Q and ~(PvQ)&R are valid, but P~&Q is not)\n" +
-                                "======================================================\n"
+                        "══════════════════════════════════════════════════════\n" +
+                        "Valid symbols:\n" +
+                        "\tGrouping: '(' and ')'\n" +
+                        "\tNegation: '~'\n" +
+                        "\tConjunction: '&'\n" +
+                        "\tConditional: '⊃' or '>'\n" +
+                        "\tDisjunction: 'v'\n" +
+                        "\tBiconditional: '≡' or ':'\n" +
+                        "\tPropositions: letters 'A'-'Z'\n" +
+                        "Usage:\n\t" +
+                        "Enter an expression, option, argument, or proposition\n" +
+                        "\tOptions:\n" +
+                        "\t\t1 (help)\n" +
+                        "\t\t2 (Truth Table)\n" +
+                        "\t\t3 (quit)\n\n" +
+
+                        "\tExpressions must only contain defined \n" +
+                        "\tpropositions and valid logical symbols. Valid \n" +
+                        "\tlogical symbols are limited to ( and ) for \n" +
+                        "\tgrouping, v for OR, & for AND, ≡ or : for \n" +
+                        "\tbiconditional, ⊃ or > for conditional, and ~ for\n" +
+                        "\tNOT. Grouping symbols ( and ) must be used so that\n" +
+                        "\teach operator (excluding ~) has no more and no less\n" +
+                        "\tthan two operands (for example, (P&Q)&R is valid,\n" +
+                        "\tbut P&Q&R is not). Negation ~ may be used before\n" +
+                        "\tgroups or propositions, but never before another \n" +
+                        "\toperator (for example, ~P&Q and ~(PvQ)&R are valid,\n" +
+                        "\tbut P~&Q is not) formulas.\n" +
+                        "\tEnter @q to Exit.\n" +
+                        "══════════════════════════════════════════════════════\n"
 
                 );
         }
 
     }
     public static void printConsoleInfo() {
-        System.out.println("--------------------TRUTH TABLE-----------------------\n" +
-                "======================================================\n" +
-                "Commands:\n" +
-                "\t$h Help\n" +
-                "\t$e Truth Table\n" +
-                "\t$q Quit\n" +
-                "======================================================\n" +
-                "Valid symbols:\n" +
-                "\tGrouping: '(' and ')'\n" +
-                "\tNegation: '~'\n" +
-                "\tConjunction: '&'\n" +
-                "\tConditional: '⊃' or '>'\n" +
-                "\tDisjunction: 'v'\n" +
-                "\tBiconditional: '≡' or ':'\n" +
-                "\tPropositions: letters 'A'-'Z'\n" +
-                "======================================================\n"
+        System.out.println(
+                "╔════════════════════════════════════════════════════╗\n" +
+                        "║\t\t\t\tTRUTH TABLE GENERATOR\t\t\t\t ║\n" +
+                        "╚════════════════════════════════════════════════════╝\n" +
+                        "This tool generates truth table for proportional logic.\n\n"+
+                        "MENU\n" +
+                        "[1] Instructions (default)\n" +
+                        "[2] Truth table\n" +
+                        "[3] Quit\n"
+
+
         );
     }
     public static LogicNode buildTree(String raw) {
