@@ -6,12 +6,12 @@ public class TruthTable {
     private static final String VALID_SYMBOL = "^[\\(\\)~&v≡:>⊃(A-Z)]+$";
 
     public static void main(String[] args) {
-            interactivePrompt();
+        prompt();
     }
-    public static void interactivePrompt() {
+    public static void prompt() {
         Scanner stdin = new Scanner(System.in);
         char mode = '1';
-        printConsoleInfo();
+        menu();
         while (true) {
             System.out.print("[" + mode + "] > ");
             String expr = stdin.next();
@@ -25,7 +25,7 @@ public class TruthTable {
             }  else {
                 switch (mode) {
                     case '2':
-                        System.out.println(runExpressionTable(expr));
+                        System.out.println(truthTable(expr));
                         break;
                     default:
                         break;
@@ -34,7 +34,7 @@ public class TruthTable {
             }
         }
     }
-    public static String runExpressionTable(String expr) {
+    public static String truthTable(String expr) {
         if (expr.matches(VALID_SYMBOL)) {
 
             Map<Character, Boolean> propMap = new LinkedHashMap<>();
@@ -111,18 +111,15 @@ public class TruthTable {
         res += end + "\n";
         return res;
     }
-    public static void printConsoleHelp() {
-        System.out.println("\tTRUTH TABLE");
-    }
     public static void printHelp(char mode) {
         switch (mode) {
             case '2':
-                System.out.println("Enter expressions only containing proposition letters and valid symbols, such as 'Av(B&C)'");
+                System.out.println("Enter valid proportion, example 'Av(B&C)'");
                 break;
             default:
                 System.out.println(
                         "══════════════════════════════════════════════════════\n" +
-                        "Valid symbols:\n" +
+                        "Acceptable symbols:\n" +
                         "\tGrouping: '(' and ')'\n" +
                         "\tNegation: '~'\n" +
                         "\tConjunction: '&'\n" +
@@ -130,12 +127,11 @@ public class TruthTable {
                         "\tDisjunction: 'v'\n" +
                         "\tBiconditional: '≡' or ':'\n" +
                         "\tPropositions: letters 'A'-'Z'\n" +
-                        "Usage:\n\t" +
-                        "Enter an expression, option, argument, or proposition\n" +
+                        "Instruction:\n" +
                         "\tOptions:\n" +
-                        "\t\t1 (help)\n" +
-                        "\t\t2 (Truth Table)\n" +
-                        "\t\t3 (quit)\n\n" +
+                        "\t\tEnter 1 for (help)\n" +
+                        "\t\tEnter 2 for (Truth Table)\n" +
+                        "\t\tEnter 3 for (quit)\n\n" +
 
                         "\tExpressions must only contain defined \n" +
                         "\tpropositions and valid logical symbols. Valid \n" +
@@ -156,16 +152,16 @@ public class TruthTable {
         }
 
     }
-    public static void printConsoleInfo() {
+    public static void menu() {
         System.out.println(
                 "╔════════════════════════════════════════════════════╗\n" +
-                        "║\t\t\t\tTRUTH TABLE GENERATOR\t\t\t\t ║\n" +
-                        "╚════════════════════════════════════════════════════╝\n" +
-                        "This tool generates truth table for proportional logic.\n\n"+
-                        "MENU\n" +
-                        "[1] Instructions (default)\n" +
-                        "[2] Truth table\n" +
-                        "[3] Quit\n"
+                "║\t\t\t\tTRUTH TABLE GENERATOR\t\t\t\t ║\n" +
+                "╚════════════════════════════════════════════════════╝\n" +
+                "This tool generates truth table for proportional logic.\n\n"+
+                "MENU\n" +
+                 "[1] Instructions (default)\n" +
+                 "[2] Truth table\n" +
+                 "[3] Quit\n"
 
 
         );
