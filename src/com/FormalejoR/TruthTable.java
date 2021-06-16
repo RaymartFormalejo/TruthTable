@@ -10,20 +10,20 @@ public class TruthTable {
     }
     public static void prompt() {
         Scanner stdin = new Scanner(System.in);
-        char mode = '1';
+        char menuNumber = '1';
         menu();
         while (true) {
-            System.out.print("[" + mode + "] > ");
+            System.out.print("[" + menuNumber + "] > ");
             String expr = stdin.next();
             if (expr.equalsIgnoreCase("3")) {
                 break;
             } else if (expr.equalsIgnoreCase("1")) {
-                printHelp(mode);
+                printHelp(menuNumber);
             } else if (expr.equalsIgnoreCase("2")) {
-                mode = '2';
-                printHelp(mode);
+                menuNumber = '2';
+                printHelp(menuNumber);
             }  else {
-                switch (mode) {
+                switch (menuNumber) {
                     case '2':
                         System.out.println(truthTable(expr));
                         break;
@@ -37,10 +37,10 @@ public class TruthTable {
     public static String truthTable(String expr) {
         if (expr.matches(VALID_SYMBOL)) {
 
-            Map<Character, Boolean> propMap = new LinkedHashMap<>();
+            Map<Character, Boolean> proportionMap = new LinkedHashMap<>();
             for (Character c: expr.toCharArray()) {
                 if (((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z')) && c != 'v') {
-                    propMap.put(c, true);
+                    proportionMap.put(c, true);
                 }
             }
 
@@ -54,62 +54,62 @@ public class TruthTable {
                 return "Error: " + e.getMessage();
             }
 
-            String[] args = Arrays.copyOf(String.valueOf(propMap.keySet()).split(""), propMap.size()+1);
-            args[propMap.size()] = expr;
+            String[] args = Arrays.copyOf(String.valueOf(proportionMap.keySet()).split(""), proportionMap.size()+1);
+            args[proportionMap.size()] = expr;
 
-            String res = "";
-            final int[] dividers = new int[]{propMap.size()-1};
-            res += getLine('╔', '╗', '═', '╦', args, dividers);
-            res += "║";
-            for (Character c: propMap.keySet()) {
-                res += " " + c + " ║";
+            String result = "";
+            final int[] dividers = new int[]{proportionMap.size()-1};
+            result += getLine('╔', '╗', '═', '╦', args, dividers);
+            result += "║";
+            for (Character c: proportionMap.keySet()) {
+                result += " " + c + " ║";
             }
-            res += "║ " + expr + " ║\n";
-            res += getLine('║','║','═','╬', args, dividers);
-            for (int i=0; i<Math.pow(2,propMap.size()); i++) {
-                int k = propMap.size()-1;
-                res += "║";
-                for (Character key: propMap.keySet()) {
-                    propMap.put(key, (i & (1 << k)) == 0);
-                    res += " " + (propMap.get(key) ? "T" : "F") + " ║";
+            result += "║ " + expr + " ║\n";
+            result += getLine('║','║','═','╬', args, dividers);
+            for (int i=0; i<Math.pow(2,proportionMap.size()); i++) {
+                int k = proportionMap.size()-1;
+                result += "║";
+                for (Character key: proportionMap.keySet()) {
+                    proportionMap.put(key, (i & (1 << k)) == 0);
+                    result += " " + (proportionMap.get(key) ? "T" : "F") + " ║";
                     k--;
                 }
-                res += "║";
+                result += "║";
                 if (expr.length() > 1) {
-                    res += String.format(" %" + (expr.length()+1)/2 + "s%" + (expr.length()/2) + "s ║", (rootNode.evaluate(propMap) ? "T" : "F"), "") + "\n";
+                    result += String.format(" %" + (expr.length()+1)/2 + "s%" + (expr.length()/2) + "s ║", (rootNode.evaluate(proportionMap) ? "T" : "F"), "") + "\n";
                 } else {
-                    res += String.format(" %s ║", (rootNode.evaluate(propMap) ? "T" : "F")) + "\n";
+                    result += String.format(" %s ║", (rootNode.evaluate(proportionMap) ? "T" : "F")) + "\n";
                 }
-                if (i<Math.pow(2,propMap.size())-1) { //Middle loops
-                    res += getLine('║','║','═','╬', args, dividers);
+                if (i<Math.pow(2,proportionMap.size())-1) { //Middle loops
+                    result += getLine('║','║','═','╬', args, dividers);
                 } else { //Last loop
-                    res += getLine('╚','╝','═','╩', args, dividers);
+                    result += getLine('╚','╝','═','╩', args, dividers);
                 }
             }
-            return res;
+            return result;
         } else {
             return "Command/expression not recognized. Please check the syntax or use $h for help.";
         }
     }
     public static String getLine(char start, char end, char filler, char divider, String[] props, int[] specialDivider) {
-        String res = "" + start;
+        String result = "" + start;
         int j = 0;
         for (String prop: props) {
-            res += filler;
+            result += filler;
             for (int i=0; i<prop.length(); i++) {
-                res += filler;
+                result += filler;
             }
-            res += filler + "" + divider;
+            result += filler + "" + divider;
             for (int dividerVal: specialDivider) {
                 if (dividerVal == j) {
-                    res += divider;
+                    result += divider;
                 }
             }
             j++;
         }
-        res = res.substring(0,res.length()-1);
-        res += end + "\n";
-        return res;
+        result = result.substring(0,result.length()-1);
+        result += end + "\n";
+        return result;
     }
     public static void printHelp(char mode) {
         switch (mode) {
@@ -145,7 +145,6 @@ public class TruthTable {
                         "\tgroups or propositions, but never before another \n" +
                         "\toperator (for example, ~P&Q and ~(PvQ)&R are valid,\n" +
                         "\tbut P~&Q is not) formulas.\n" +
-                        "\tEnter @q to Exit.\n" +
                         "══════════════════════════════════════════════════════\n"
 
                 );
