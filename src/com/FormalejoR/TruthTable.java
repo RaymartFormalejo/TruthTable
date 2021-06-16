@@ -3,7 +3,8 @@ package com.FormalejoR;
 import java.util.*;
 
 public class TruthTable {
-    private static final String VALID_SYMBOL = "^[\\(\\)~&v≡:>⊃(A-Z)]+$";
+
+    private static final String VALID_SYMBOLS = "^[\\(\\)~&v≡:>⊃(A-Z)]+$";
 
     public static void main(String[] args) {
         prompt();
@@ -29,13 +30,12 @@ public class TruthTable {
                         break;
                     default:
                         break;
-
                 }
             }
         }
     }
     public static String truthTable(String expr) {
-        if (expr.matches(VALID_SYMBOL)) {
+        if (expr.matches(VALID_SYMBOLS)) {
 
             Map<Character, Boolean> proportionMap = new LinkedHashMap<>();
             for (Character c: expr.toCharArray()) {
@@ -114,26 +114,16 @@ public class TruthTable {
     public static void printHelp(char mode) {
         switch (mode) {
             case '2':
-                System.out.println("Enter valid proportion, example 'Av(B&C)'");
+                System.out.println("\n\tEnter valid expression, for example 'Av(B&C)':");
                 break;
             default:
                 System.out.println(
                         "══════════════════════════════════════════════════════\n" +
-                        "Acceptable symbols:\n" +
-                        "\tGrouping: '(' and ')'\n" +
-                        "\tNegation: '~'\n" +
-                        "\tConjunction: '&'\n" +
-                        "\tConditional: '⊃' or '>'\n" +
-                        "\tDisjunction: 'v'\n" +
-                        "\tBiconditional: '≡' or ':'\n" +
-                        "\tPropositions: letters 'A'-'Z'\n" +
-                        "Instruction:\n" +
-                        "\tOptions:\n" +
-                        "\t\tEnter 1 for (help)\n" +
-                        "\t\tEnter 2 for (Truth Table)\n" +
-                        "\t\tEnter 3 for (quit)\n\n" +
-
-                        "\tExpressions must only contain defined \n" +
+                        "\t\t\t\t\tINSTRUCTIONS:\n\n" +
+                        "\tEnter 1 for help\n" +
+                        "\tEnter 2 for truth table\n" +
+                        "\tEnter 3 to exit program\n\n" +
+                        "\t\tExpressions must only contain defined \n" +
                         "\tpropositions and valid logical symbols. Valid \n" +
                         "\tlogical symbols are limited to ( and ) for \n" +
                         "\tgrouping, v for OR, & for AND, ≡ or : for \n" +
@@ -144,7 +134,11 @@ public class TruthTable {
                         "\tbut P&Q&R is not). Negation ~ may be used before\n" +
                         "\tgroups or propositions, but never before another \n" +
                         "\toperator (for example, ~P&Q and ~(PvQ)&R are valid,\n" +
-                        "\tbut P~&Q is not) formulas.\n" +
+                        "\tbut P~&Q is not) formulas.\n\n" +
+                        "\t\tThese are the valid symbols; grouping: '(' and ')',\n" +
+                        "\tnegation: '~', conjunction: '&', conditional: '⊃' or '>'\n" +
+                        "\tdisjunction: 'v', biconditional: '≡' or ':', propositions:\n" +
+                        "\tletters 'A'-'Z'\n\n" +
                         "══════════════════════════════════════════════════════\n"
 
                 );
@@ -156,8 +150,9 @@ public class TruthTable {
                 "╔════════════════════════════════════════════════════╗\n" +
                 "║\t\t\t\tTRUTH TABLE GENERATOR\t\t\t\t ║\n" +
                 "╚════════════════════════════════════════════════════╝\n" +
-                "This tool generates truth table for proportional logic.\n\n"+
-                "MENU\n" +
+                "\tThis tool generates truth table for proportional\n" +
+                        "\t\t\t\t\tlogic.\n\n"+
+                "\tMENU\n" +
                  "[1] Instructions (default)\n" +
                  "[2] Truth table\n" +
                  "[3] Quit\n"
