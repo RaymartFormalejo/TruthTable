@@ -16,22 +16,56 @@ public class TruthTable {
         while (true) {
             System.out.print("[" + menuNumber + "] > ");
             String expr = stdin.next();
-            if (expr.equalsIgnoreCase("3")) {
+            if (expr.equalsIgnoreCase("4")) {
                 break;
             } else if (expr.equalsIgnoreCase("1")) {
                 printHelp(menuNumber);
             } else if (expr.equalsIgnoreCase("2")) {
                 menuNumber = '2';
                 printHelp(menuNumber);
+            } else if (expr.equalsIgnoreCase("3")) {
+                menuNumber = '3';
+                printHelp(menuNumber);
             }  else {
                 switch (menuNumber) {
                     case '2':
                         System.out.println(truthTable(expr));
                         break;
+                    case '3':
+                        subSet();
+                        break;
                     default:
                         break;
                 }
             }
+        }
+    }
+    public static void subSet() {
+        ArrayList<Character> set = new ArrayList<>();
+        Scanner scan = new Scanner(System.in);
+
+        String rawSet = scan.nextLine();
+
+        for (Character s: rawSet.toCharArray()) {
+            if (((s >= 'a' && s <= 'z') || (s >= 'A' && s <= 'Z')) || (s >= '0' && s <= '9')) {
+                set.add(s);
+            }
+        }
+        printSubsets(set);
+    }
+
+    static void printSubsets(ArrayList<Character> set) {
+        int n = set.size();
+        for (int i = 0; i < (1<<n); i++)
+        {
+            System.out.print("{ ");
+
+            for (int j = 0; j < n; j++)
+                if ((i & (1 << j)) > 0)
+                    System.out.print(set.get(j) + " ");
+
+            System.out.println("}");
+
         }
     }
     public static String truthTable(String expr) {
@@ -116,6 +150,9 @@ public class TruthTable {
             case '2':
                 System.out.println("\n\tEnter valid expression, for example 'Av(B&C)':");
                 break;
+            case '3':
+                System.out.println("\n\tEnter a set, for example '{'a', 'b', 'c'}':");
+                break;
             default:
                 System.out.println(
                         "══════════════════════════════════════════════════════\n" +
@@ -139,7 +176,6 @@ public class TruthTable {
 
                 );
         }
-
     }
     public static void menu() {
         System.out.println(
@@ -151,7 +187,8 @@ public class TruthTable {
                 "\tMENU\n" +
                  "[1] Instructions (default)\n" +
                  "[2] Truth table\n" +
-                 "[3] Quit\n"
+                 "[3] Subset\n" +
+                 "[4] Quit\n"
 
 
         );
