@@ -135,10 +135,6 @@ public class TruthTable {
                         "\tgroups or propositions, but never before another \n" +
                         "\toperator (for example, ~P&Q and ~(PvQ)&R are valid,\n" +
                         "\tbut P~&Q is not) formulas.\n\n" +
-                        "\t\tThese are the valid symbols; grouping: '(' and ')',\n" +
-                        "\tnegation: '~', conjunction: '&', conditional: '⊃' or '>'\n" +
-                        "\tdisjunction: 'v', biconditional: '≡' or ':', propositions:\n" +
-                        "\tletters 'A'-'Z'\n\n" +
                         "══════════════════════════════════════════════════════\n"
 
                 );
@@ -151,7 +147,7 @@ public class TruthTable {
                 "║\t\t\t\tTRUTH TABLE GENERATOR\t\t\t\t ║\n" +
                 "╚════════════════════════════════════════════════════╝\n" +
                 "\tThis tool generates truth table for proportional\n" +
-                        "\t\t\t\t\tlogic.\n\n"+
+                        "\t\t\t\t\t\tlogic.\n\n"+
                 "\tMENU\n" +
                  "[1] Instructions (default)\n" +
                  "[2] Truth table\n" +
