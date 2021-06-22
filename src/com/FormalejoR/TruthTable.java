@@ -93,7 +93,7 @@ public class TruthTable {
             }
             return res;
         } else {
-            return RED + "Command/expression not recognized. Please check the syntax or use $h for help." + RESET;
+            return RED + "Invalid input. Please check the syntax or enter I for instructions." + RESET;
         }
     }
     public static String getLine(char start, char end, char filler, char divider, String[] props, int[] specialDivider) {
@@ -186,7 +186,7 @@ public class TruthTable {
                 raw = getNode(raw, right);
 
                 if (raw.length() != 0) {
-                    throw new IllegalStateException(RED + "Couldn't parse expression fully. Remaining part: " + raw + ". Please check your syntax." + RESET);
+                    throw new IllegalStateException(RED + "Couldn't analyze expression fully. Remaining part: " + raw + ". Please check your syntax." + RESET);
                 }
                 return new LogicNode(op, left, right, NodeType.OPERATOR, false);
             } else {
@@ -205,7 +205,7 @@ public class TruthTable {
         if (raw.charAt(0) == '(') {
             LogicNode temp = buildTree(raw.substring(1, getGroupEnd(raw)));
             if (temp == null) {
-                throw new IllegalStateException(RED + "Unable to correctly parse expression. Please check the syntax." + RESET);
+                throw new IllegalStateException(RED + "Unable to correctly analyze expression. Please check the syntax." + RESET);
             }
             newNode.copyFrom(temp);
             newNode.inverted = inverted != newNode.inverted;
