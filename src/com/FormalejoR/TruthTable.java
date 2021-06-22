@@ -133,18 +133,25 @@ public class TruthTable {
                                 "\tEnter 1 for help\n" +
                                 "\tEnter 2 for truth table\n" +
                                 "\tEnter 3 to exit program\n\n" +
-                                "\t\tExpressions must only contain defined \n" +
-                                "\tpropositions and valid logical symbols. Valid \n" +
-                                "\tlogical symbols are limited to ( and ) for \n" +
-                                "\tgrouping, v for OR, & for AND, ≡ or : for \n" +
-                                "\tbi-conditional, ⊃ or > for conditional, and ~ for\n" +
-                                "\tNOT. Grouping symbols ( and ) must be used so that\n" +
-                                "\teach operator (excluding ~) has no more and no less\n" +
-                                "\tthan two operands (for example, (P&Q)&R is valid,\n" +
-                                "\tbut P&Q&R is not). Negation ~ may be used before\n" +
-                                "\tgroups or propositions, but never before another \n" +
-                                "\toperator (for example, ~P&Q and ~(PvQ)&R are valid,\n" +
-                                "\tbut P~&Q is not) formulas.\n\n" +
+                                "\tYou must enter a valid expression by following\n" +
+                                "\tthe list of valid symbols.\n\n" +
+                                "\tValid logical symbols\n" +
+                                YELLOW + "\t\t*" + RESET + " '(' and ')' for groupings\n" +
+                                YELLOW + "\t\t*" + RESET + " 'v' for OR\n" +
+                                YELLOW + "\t\t*" + RESET + " '&' for AND\n" +
+                                YELLOW + "\t\t*" + RESET + " '≡' or ':' for bi-conditional\n" +
+                                YELLOW + "\t\t*" + RESET + " '>' for conditional\n" +
+                                YELLOW + "\t\t*" + RESET + " '~' for NOT\n\n" +
+                                "\tExample valid expressions:\n" +
+                                YELLOW + "\t\t* " + RESET + " PvQ\n" +
+                                YELLOW + "\t\t*" + RESET + " (P&Q)&R\n" +
+                                YELLOW + "\t\t*" + RESET + " ~(PvQ)&(Q>R)\n" +
+                                YELLOW + "\t\t*" + RESET + " ~P&Q\n\n" +
+                                "\tExample of invalid expression: \n" +
+                                YELLOW + "\t\t*" + RESET + " P~vQ\n" +
+                                YELLOW + "\t\t*" + RESET + " PQ\n" +
+                                YELLOW + "\t\t*" + RESET + " (PvQ\n" +
+                                YELLOW + "\t\t*" + RESET + " PvQ)\n" +
                                 "══════════════════════════════════════════════════════\n"
 
                 );
@@ -153,16 +160,14 @@ public class TruthTable {
     public static void menu() {
         System.out.println(
                 "╔════════════════════════════════════════════════════╗\n" +
-                        "║\t\t\t\tTRUTH TABLE GENERATOR\t\t\t\t ║\n" +
-                        "╚════════════════════════════════════════════════════╝\n" +
-                        "\tThis tool generates truth table for proportional\n" +
-                        "\t\t\t\t\t\tlogic.\n\n"+
-                        "\tMENU\n" +
-                        "[1] Instructions (default)\n" +
-                        "[2] Truth table\n" +
-                        "[3] Quit\n"
-
-
+                "║\t\t\t\tTRUTH TABLE GENERATOR\t\t\t\t ║\n" +
+                "╚════════════════════════════════════════════════════╝\n" +
+                "\tThis tool generates truth table for proportional\n" +
+                "\t\t\t\t\t\tlogic.\n\n"+
+                "\tMENU\n" +
+                YELLOW + "[1]" + RESET +" Instructions (default)\n" +
+                YELLOW + "[2]"+ RESET +" Truth table\n" +
+                YELLOW + "[3]"+ RESET +" Quit\n"
         );
     }
     public static LogicNode buildTree(String raw) {
