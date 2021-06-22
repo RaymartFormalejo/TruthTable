@@ -5,6 +5,11 @@ import java.util.*;
 public class TruthTable {
 
     private static final String VALID_SYMBOLS = "^[\\(\\)~&v≡:>⊃(A-Z)]+$";
+    public static final String RED = "\u001B[31m";
+    public static final String YELLOW = "\u001B[33m";
+    public static final String RESET = "\033[0m";
+    public static final String CYAN = "\033[0;36m";
+    public static final String GREEN = "\033[0;32m";
 
     public static void main(String[] args) {
         prompt();
@@ -14,25 +19,19 @@ public class TruthTable {
         char menuNumber = '1';
         menu();
         while (true) {
-            System.out.print("[" + menuNumber + "] > ");
+            System.out.print(YELLOW + "[" + menuNumber + "] " + RESET);
             String expr = stdin.next();
-            if (expr.equalsIgnoreCase("4")) {
+            if (expr.equalsIgnoreCase("3")) {
                 break;
             } else if (expr.equalsIgnoreCase("1")) {
                 printHelp(menuNumber);
             } else if (expr.equalsIgnoreCase("2")) {
                 menuNumber = '2';
                 printHelp(menuNumber);
-            } else if (expr.equalsIgnoreCase("3")) {
-                menuNumber = '3';
-                printHelp(menuNumber);
-            }  else {
+            }   else {
                 switch (menuNumber) {
                     case '2':
                         System.out.println(truthTable(expr));
-                        break;
-                    case '3':
-                        subSet();
                         break;
                     default:
                         break;
@@ -40,41 +39,13 @@ public class TruthTable {
             }
         }
     }
-    public static void subSet() {
-        ArrayList<Character> set = new ArrayList<>();
-        Scanner scan = new Scanner(System.in);
 
-        String rawSet = scan.nextLine();
-
-        for (Character s: rawSet.toCharArray()) {
-            if (((s >= 'a' && s <= 'z') || (s >= 'A' && s <= 'Z')) || (s >= '0' && s <= '9')) {
-                set.add(s);
-            }
-        }
-        printSubsets(set);
-    }
-
-    static void printSubsets(ArrayList<Character> set) {
-        int n = set.size();
-        for (int i = 0; i < (1<<n); i++)
-        {
-            System.out.print("{ ");
-
-            for (int j = 0; j < n; j++)
-                if ((i & (1 << j)) > 0)
-                    System.out.print(set.get(j) + " ");
-
-            System.out.println("}");
-
-        }
-    }
     public static String truthTable(String expr) {
         if (expr.matches(VALID_SYMBOLS)) {
-
-            Map<Character, Boolean> proportionMap = new LinkedHashMap<>();
-            for (Character c: expr.toCharArray()) {
+            Map<Character, Boolean> propMap = new LinkedHashMap<>();
+            for (Character c : expr.toCharArray()) {
                 if (((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z')) && c != 'v') {
-                    proportionMap.put(c, true);
+                    propMap.put(c, true);
                 }
             }
 
@@ -82,47 +53,47 @@ public class TruthTable {
             try {
                 rootNode = buildTree(expr);
                 if (rootNode == null) {
-                    return "Error: invalid expression. Please try again.";
+                    return RED + "Error: invalid expression. Please try again." + RESET;
                 }
             } catch (Exception e) {
-                return "Error: " + e.getMessage();
+                return RED + "Error: " + e.getMessage() + RESET;
             }
 
-            String[] args = Arrays.copyOf(String.valueOf(proportionMap.keySet()).split(""), proportionMap.size()+1);
-            args[proportionMap.size()] = expr;
+            String[] args = Arrays.copyOf(String.valueOf(propMap.keySet()).split(""), propMap.size() + 1);
+            args[propMap.size()] = expr;
 
-            String result = "";
-            final int[] dividers = new int[]{proportionMap.size()-1};
-            result += getLine('╔', '╗', '═', '╦', args, dividers);
-            result += "║";
-            for (Character c: proportionMap.keySet()) {
-                result += " " + c + " ║";
+            String res = "";
+            final int[] dividers = new int[]{propMap.size() - 1}; //Dividers for table
+            res += getLine('┍', '┑', '─', '┬', args, dividers);
+            res += "│";
+            for (Character c : propMap.keySet()) {
+                res += " " + c + " │";
             }
-            result += "║ " + expr + " ║\n";
-            result += getLine('║','║','═','╬', args, dividers);
-            for (int i=0; i<Math.pow(2,proportionMap.size()); i++) {
-                int k = proportionMap.size()-1;
-                result += "║";
-                for (Character key: proportionMap.keySet()) {
-                    proportionMap.put(key, (i & (1 << k)) == 0);
-                    result += " " + (proportionMap.get(key) ? "T" : "F") + " ║";
+            res += "│ " + expr + " │\n";
+            res += getLine('│', '│', '─', '┼', args, dividers);
+            for (int i = 0; i < Math.pow(2, propMap.size()); i++) {
+                int k = propMap.size() - 1;
+                res += "│";
+                for (Character key : propMap.keySet()) {
+                    propMap.put(key, (i & (1 << k)) == 0);
+                    res += " " + (propMap.get(key) ? "T" : "F") + " │";
                     k--;
                 }
-                result += "║";
+                res += "│";
                 if (expr.length() > 1) {
-                    result += String.format(" %" + (expr.length()+1)/2 + "s%" + (expr.length()/2) + "s ║", (rootNode.evaluate(proportionMap) ? "T" : "F"), "") + "\n";
+                    res += String.format(" %" + (expr.length() + 1) / 2 + "s%" + (expr.length() / 2) + "s │", (rootNode.evaluate(propMap) ? "T" : "F"), "") + "\n";
                 } else {
-                    result += String.format(" %s ║", (rootNode.evaluate(proportionMap) ? "T" : "F")) + "\n";
+                    res += String.format(" %s │", (rootNode.evaluate(propMap) ? "T" : "F")) + "\n";
                 }
-                if (i<Math.pow(2,proportionMap.size())-1) { //Middle loops
-                    result += getLine('║','║','═','╬', args, dividers);
+                if (i < Math.pow(2, propMap.size()) - 1) { //Middle loops
+                    res += getLine('│', '│', '─', '┼', args, dividers);
                 } else { //Last loop
-                    result += getLine('╚','╝','═','╩', args, dividers);
+                    res += getLine('┕', '┙', '─', '┴', args, dividers);
                 }
             }
-            return result;
+            return res;
         } else {
-            return "Command/expression not recognized. Please check the syntax or use $h for help.";
+            return RED + "Command/expression not recognized. Please check the syntax or use $h for help." + RESET;
         }
     }
     public static String getLine(char start, char end, char filler, char divider, String[] props, int[] specialDivider) {
@@ -148,31 +119,33 @@ public class TruthTable {
     public static void printHelp(char mode) {
         switch (mode) {
             case '2':
-                System.out.println("\n\tEnter valid expression, for example 'Av(B&C)':");
-                break;
-            case '3':
-                System.out.println("\n\tEnter a set, for example '{'a', 'b', 'c'}':");
+                System.out.println("──────────────────────────────────────────────────────\n" +
+                        "\t\t\t\t\tTruth Table \n" +
+                        "──────────────────────────────────────────────────────\n" +
+                        "\tDisplay truth table of expression entered.\n" +
+                        "\tEnter expressions only containing proposition \n" +
+                        "\tletters and valid symbols, for example 'Pv(Q&R)'");
                 break;
             default:
                 System.out.println(
                         "══════════════════════════════════════════════════════\n" +
-                        "\t\t\t\t\tINSTRUCTIONS:\n\n" +
-                        "\tEnter 1 for help\n" +
-                        "\tEnter 2 for truth table\n" +
-                        "\tEnter 3 to exit program\n\n" +
-                        "\t\tExpressions must only contain defined \n" +
-                        "\tpropositions and valid logical symbols. Valid \n" +
-                        "\tlogical symbols are limited to ( and ) for \n" +
-                        "\tgrouping, v for OR, & for AND, ≡ or : for \n" +
-                        "\tbiconditional, ⊃ or > for conditional, and ~ for\n" +
-                        "\tNOT. Grouping symbols ( and ) must be used so that\n" +
-                        "\teach operator (excluding ~) has no more and no less\n" +
-                        "\tthan two operands (for example, (P&Q)&R is valid,\n" +
-                        "\tbut P&Q&R is not). Negation ~ may be used before\n" +
-                        "\tgroups or propositions, but never before another \n" +
-                        "\toperator (for example, ~P&Q and ~(PvQ)&R are valid,\n" +
-                        "\tbut P~&Q is not) formulas.\n\n" +
-                        "══════════════════════════════════════════════════════\n"
+                                "\t\t\t\t\tINSTRUCTIONS:\n\n" +
+                                "\tEnter 1 for help\n" +
+                                "\tEnter 2 for truth table\n" +
+                                "\tEnter 3 to exit program\n\n" +
+                                "\t\tExpressions must only contain defined \n" +
+                                "\tpropositions and valid logical symbols. Valid \n" +
+                                "\tlogical symbols are limited to ( and ) for \n" +
+                                "\tgrouping, v for OR, & for AND, ≡ or : for \n" +
+                                "\tbi-conditional, ⊃ or > for conditional, and ~ for\n" +
+                                "\tNOT. Grouping symbols ( and ) must be used so that\n" +
+                                "\teach operator (excluding ~) has no more and no less\n" +
+                                "\tthan two operands (for example, (P&Q)&R is valid,\n" +
+                                "\tbut P&Q&R is not). Negation ~ may be used before\n" +
+                                "\tgroups or propositions, but never before another \n" +
+                                "\toperator (for example, ~P&Q and ~(PvQ)&R are valid,\n" +
+                                "\tbut P~&Q is not) formulas.\n\n" +
+                                "══════════════════════════════════════════════════════\n"
 
                 );
         }
@@ -180,15 +153,14 @@ public class TruthTable {
     public static void menu() {
         System.out.println(
                 "╔════════════════════════════════════════════════════╗\n" +
-                "║\t\t\t\tTRUTH TABLE GENERATOR\t\t\t\t ║\n" +
-                "╚════════════════════════════════════════════════════╝\n" +
-                "\tThis tool generates truth table for proportional\n" +
+                        "║\t\t\t\tTRUTH TABLE GENERATOR\t\t\t\t ║\n" +
+                        "╚════════════════════════════════════════════════════╝\n" +
+                        "\tThis tool generates truth table for proportional\n" +
                         "\t\t\t\t\t\tlogic.\n\n"+
-                "\tMENU\n" +
-                 "[1] Instructions (default)\n" +
-                 "[2] Truth table\n" +
-                 "[3] Subset\n" +
-                 "[4] Quit\n"
+                        "\tMENU\n" +
+                        "[1] Instructions (default)\n" +
+                        "[2] Truth table\n" +
+                        "[3] Quit\n"
 
 
         );
@@ -209,7 +181,7 @@ public class TruthTable {
                 raw = getNode(raw, right);
 
                 if (raw.length() != 0) {
-                    throw new IllegalStateException("Couldn't parse expression fully. Remaining part: " + raw + ". Please check your syntax.");
+                    throw new IllegalStateException(RED + "Couldn't parse expression fully. Remaining part: " + raw + ". Please check your syntax." + RESET);
                 }
                 return new LogicNode(op, left, right, NodeType.OPERATOR, false);
             } else {
@@ -228,7 +200,7 @@ public class TruthTable {
         if (raw.charAt(0) == '(') {
             LogicNode temp = buildTree(raw.substring(1, getGroupEnd(raw)));
             if (temp == null) {
-                throw new IllegalStateException("Unable to correctly parse expression. Please check the syntax.");
+                throw new IllegalStateException(RED + "Unable to correctly parse expression. Please check the syntax." + RESET);
             }
             newNode.copyFrom(temp);
             newNode.inverted = inverted != newNode.inverted;
@@ -291,9 +263,9 @@ public class TruthTable {
         public boolean evaluate(Map<Character, Boolean> propMap) {
             if (this.type == NodeType.OPERATOR) {
                 return this.inverted != this.runOperator(propMap);
-            } else { //Otherwise, this is a proposition
+            } else {
                 if (!propMap.containsKey(this.val)) {
-                    throw new IllegalArgumentException("Proposition " + this.val + " is not defined");
+                    throw new IllegalArgumentException(RED + "Proposition " + this.val + " is not defined" + RESET);
                 }
                 return this.inverted != propMap.get(this.val);
             }
@@ -314,7 +286,7 @@ public class TruthTable {
                 case '≡':
                     return propA == propB;
                 default:
-                    throw new UnsupportedOperationException("Logical operator " + this.val + " is not supported");
+                    throw new UnsupportedOperationException(RED + "Logical operator " + this.val + " is not supported" + RESET);
             }
         }
     }
