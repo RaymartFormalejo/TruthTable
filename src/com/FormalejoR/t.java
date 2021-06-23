@@ -319,7 +319,7 @@ public class t {
             for (boolean arg : argumentResults) {
                 validity &= arg;
             }
-            res += "\t\t\tValidity: " + (validity ?  GREEN + "Valid" + RESET : RED + "Invalid" + RESET) + "\n";
+            res += "\t\t\t\t" + (validity ?  GREEN + "Valid".toUpperCase() + RESET : RED + "Invalid".toUpperCase() + RESET) + "\n";
             return res;
         } else {
             return RED + "Invalid input. Please check the syntax or enter 'I' for instructions.\nNote that the premises and the conclusion must each be separated by commas and the conclusion is the last item." + RESET;
@@ -360,7 +360,7 @@ public class t {
                 if (rootNode == null) {
                     return RED + "Error: invalid expression. Please try again." + RESET;
                 }
-                return "Expression is: " + (rootNode.evaluate(propMap) ?  GREEN + "true" + RESET : RED + "false" + RESET);
+                return "\t=" + (rootNode.evaluate(propMap) ?  GREEN + "true".toUpperCase() + RESET : RED + "false".toUpperCase() + RESET);
             } catch (Exception e) {
                 return RED + "Error: " + e.getMessage() + RESET;
             }
